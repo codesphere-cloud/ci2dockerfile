@@ -1,0 +1,29 @@
+schemaVersion: v0.2
+prepare:
+  steps:
+    - name: Download binary
+      command: wget https://dl.min.io/server/minio/release/linux-arm64/minio
+    - name: Make minio executable
+      command: chmod +x minio
+test:
+  steps: []
+run:
+  api:
+    steps:
+      - command: ./minio server --address ":3000" --console-address ":3001" ~/app/data
+    plan: 8
+    replicas: 1
+    isPublic: true
+    network:
+      ports:
+        - port: 3000
+          isPublic: true
+        - port: 3001
+          isPublic: true
+      paths:
+        - port: 3000
+          path: /
+          stripPath: false
+        - port: 3001
+          path: /console
+          stripPath: true

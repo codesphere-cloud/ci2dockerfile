@@ -23,3 +23,12 @@ go.work.sum
 
 # env file
 .env
+
+# Ignore all files without extension
+*
+!/**/
+!*.*
+!Makefile
+
+# Ignore export folder
+export/
