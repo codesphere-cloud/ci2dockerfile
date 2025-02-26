@@ -20,7 +20,7 @@ COPY --chown=user:appusers . /home/user/app
 RUN {{$val.Command}}{{end}}
 
 # Make entrypoint executable
-RUN chmod +x /entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
 # Execute Run Stage
 ENTRYPOINT ["./entrypoint.sh"]

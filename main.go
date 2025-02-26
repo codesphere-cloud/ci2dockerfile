@@ -5,30 +5,41 @@ import (
 	"fmt"
 	"os"
 	"yml2docker/templates"
+
+	"github.com/jessevdk/go-flags"
 )
 
-func main() {
-	baseImage := flag.String("b", "", "Base image for the dockerfile. (Required)")
-	inputPath := flag.String("i", "", "Input path for the yml file. Default is './ci.yml'.")
-	outputPath := flag.String("o", "", "Output path of the folder including docker compose and services. Default is './export'.")
-	flag.Parse()
+type CommandArguments struct {
+	BaseImage  string   `short:"b" long:"base-image" description:"Base image for the dockerfile." required:"true"`
+	InputPath  string   `short:"i" long:"input-path" description:"Input path for the yml file." default:"./ci.yml"`
+	OutputPath string   `short:"o" long:"output-path" description:"Output path of the folder including docker compose and services." default:"./export"`
+	EnvVars    []string `short:"e" long:"env-vars" description:"Env vars to put into docker compose services."`
+}
 
-	if *baseImage == "" {
+func main() {
+	opts := CommandArguments{}
+	_, err := flags.ParseArgs(&opts, os.Args)
+	if err != nil {
+		fmt.Printf("error parsing command arguments: %s\n", err)
+		os.Exit(1)
+	}
+
+	if opts.BaseImage == "" {
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
 
-	if *inputPath == "" {
-		*inputPath = "./ci.yml"
+	if opts.InputPath == "" {
+		opts.InputPath = "./ci.yml"
 	}
-	if *outputPath == "" {
-		*outputPath = "./export"
+	if opts.OutputPath == "" {
+		opts.OutputPath = "./export"
 	}
 
-	fmt.Printf("base image: %s, input path: %s, output path: %s\n", *baseImage, *inputPath, *outputPath)
+	fmt.Printf("base image: %s, input path: %s, output path: %s\n", opts.BaseImage, opts.InputPath, opts.OutputPath)
 
 	// Get map from yml file
-	ymlContent, err := templates.ReadYmlFile(*inputPath)
+	ymlContent, err := templates.ReadYmlFile(opts.InputPath)
 	if err != nil {
 		fmt.Printf("error getting map from yml file: %s\n", err)
 		os.Exit(1)
@@ -39,8 +50,8 @@ func main() {
 		fmt.Printf("creating dockerfile for service %s\n", serviceName)
 
 		config := templates.DockerTemplateConfig{
-			OutputPath:   *outputPath + "/" + serviceName,
-			BaseImage:    *baseImage,
+			OutputPath:   opts.OutputPath + "/" + serviceName,
+			BaseImage:    opts.BaseImage,
 			PrepareSteps: ymlContent.Prepare.Steps,
 			RunSteps:     service.Steps,
 		}
@@ -55,7 +66,7 @@ func main() {
 	fmt.Printf("creating nginx config file\n")
 
 	configNginx := templates.NginxConfigTemplateConfig{
-		OutputPath: *outputPath,
+		OutputPath: opts.OutputPath,
 		Services:   ymlContent.Run,
 	}
 	err = templates.CreateNginxConfig(configNginx)
@@ -68,8 +79,9 @@ func main() {
 	fmt.Printf("creating docker compose file\n")
 
 	configDockerCompose := templates.DockerComposeTemplateConfig{
-		OutputPath: *outputPath,
+		OutputPath: opts.OutputPath,
 		Services:   ymlContent.Run,
+		EnvVars:    opts.EnvVars,
 	}
 	err = templates.CreateDockerCompose(configDockerCompose)
 	if err != nil {

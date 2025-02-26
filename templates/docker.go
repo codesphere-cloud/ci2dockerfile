@@ -27,7 +27,7 @@ func CreateDockerfile(config DockerTemplateConfig) error {
 		return fmt.Errorf("error creating docker file: %w\n", err)
 	}
 
-	dockerTemplate, err := template.ParseFiles("./helper/docker.tmpl")
+	dockerTemplate, err := template.ParseFiles("./templates/docker.tmpl")
 	if err != nil {
 		return fmt.Errorf("error parsing docker template: %w\n", err)
 	}
@@ -43,7 +43,7 @@ func CreateDockerfile(config DockerTemplateConfig) error {
 		return fmt.Errorf("error creating entrypoint.sh: %w\n", err)
 	}
 
-	entrypointTemplate, err := template.ParseFiles("./helper/shell.tmpl")
+	entrypointTemplate, err := template.ParseFiles("./templates/shell.tmpl")
 	if err != nil {
 		return fmt.Errorf("error parsing shell template: %w\n", err)
 	}

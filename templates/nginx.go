@@ -14,7 +14,7 @@ type NginxConfigTemplateConfig struct {
 }
 
 func CreateNginxConfig(config NginxConfigTemplateConfig) error {
-	t, err := template.ParseFiles("./helper/nginx.tmpl")
+	t, err := template.ParseFiles("./templates/nginx.tmpl")
 	if err != nil {
 		return fmt.Errorf("error parsing nginx template: %w\n", err)
 	}

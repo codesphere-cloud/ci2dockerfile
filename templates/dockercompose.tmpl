@@ -1,8 +1,10 @@
-version: '3.8'
+version: '3.8'{{$envvars := .EnvVars}}
 services:{{range $key, $val := .Services}}
     {{$key}}:
         build:
             context: ./{{$key}}
+        environment:{{range $envvar := $envvars}}
+            - {{$envvar}}{{end}}
         networks:
             - server{{end}}
     nginx:

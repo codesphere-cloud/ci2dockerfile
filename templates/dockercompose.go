@@ -11,10 +11,11 @@ type DockerComposeTemplateConfig struct {
 	OutputPath string
 	// Docker compose configuration
 	Services map[string]model.Service
+	EnvVars  []string
 }
 
 func CreateDockerCompose(config DockerComposeTemplateConfig) error {
-	t, err := template.ParseFiles("./helper/dockercompose.tmpl")
+	t, err := template.ParseFiles("./templates/dockercompose.tmpl")
 	if err != nil {
 		return fmt.Errorf("error parsing docker compose template: %w\n", err)
 	}
