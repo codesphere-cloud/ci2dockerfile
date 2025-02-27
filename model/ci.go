@@ -24,8 +24,10 @@ type Service struct {
 }
 
 type Network struct {
-	Paths []Path `yaml:"paths"`
-	Ports []Port `yaml:"ports"`
+	Path      string `yaml:"path"`
+	StripPath bool   `yaml:"stripPath"`
+	Paths     []Path `yaml:"paths"`
+	Ports     []Port `yaml:"ports"`
 }
 
 type Path struct {

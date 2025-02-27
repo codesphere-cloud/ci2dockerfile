@@ -4,7 +4,7 @@
 Run `make build` in a terminal of this folder to create the go build.
 
 ## Use tool
-To export the example run `make example-export`. To run the newly created example docker compose file run `make run`.
+To export the example run `make example-export-single` and `make example-export-multi` for an old and new ci.yml. To run the newly created example docker compose file run `make run` (only uses the multi/new export).
 
 To use your own command you can use `./yml2docker -b ... -i ... -o ... -e ...`.
 

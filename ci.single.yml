@@ -1,0 +1,61 @@
+schemaVersion: v0.2
+prepare:
+  steps:
+    - name: Install python
+      command: chmod +x ./scripts/Ci-Pipeline/install-python.sh &&
+        ./scripts/Ci-Pipeline/install-python.sh
+    - name: Install python dependencies
+      command: chmod +x ./scripts/Ci-Pipeline/install-python-dependencies.sh &&
+        ./scripts/Ci-Pipeline/install-python-dependencies.sh
+    - name: install node LTS (20.16)
+      command: chmod +x ./scripts/Ci-Pipeline/install-node.sh &&
+        ./scripts/Ci-Pipeline/install-node.sh
+    - name: install svelte chat-ui
+      command: cd ./packages/frontend && npm i
+    - name: install doc_server
+      command: cd ./packages/doc_server && npm i
+test:
+  steps: []
+run:
+  frontend:
+    steps:
+      - name: Run Chat UI
+        command: cd packages/frontend && npm run dev -- --host 0.0.0.0 --port 3000
+    plan: 21
+    replicas: 1
+    isPublic: true
+    network:
+      path: /
+      stripPath: true
+  doc-server:
+    steps:
+      - command:
+          cd ./packages/doc_server && npx nodemon --watch server.js --exec "node
+          server.js"
+    plan: 20
+    replicas: 1
+    isPublic: true
+    network:
+      path: /doc_server
+      stripPath: true
+  prefect-worker-process:
+    steps:
+      - command: cd ./packages/pipelines && pipenv run ./run_worker.sh
+          ${WORKSPACE_ID}-worker process
+    plan: 22
+    replicas: 1
+    isPublic: true
+    network:
+      path: /prefect-worker-process
+      stripPath: true
+  flowhandler:
+    steps:
+      - command:
+          cd ./packages/pipelines && pipenv run uvicorn main:app --port 3000
+          --host 0.0.0.0 --log-level debug --reload
+    plan: 21
+    replicas: 1
+    isPublic: true
+    network:
+      path: /flowhandler
+      stripPath: true

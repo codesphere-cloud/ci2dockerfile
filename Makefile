@@ -1,11 +1,14 @@
 build:
 	@go build -o yml2docker .
 
-example-export:
-	@./yml2docker -b alpine:latest -e MINIO_BROWSER_REDIRECT_URL=http://localhost:8089/console
+example-export-single:
+	@./yml2docker -b alpine:latest -i ./ci.single.yml -o ./export/single
+
+example-export-multi:
+	@./yml2docker -b alpine:latest -i ./ci.multi.yml -o ./export/multi -e MINIO_BROWSER_REDIRECT_URL=http://localhost:8089/console
 
 run:
-	@cd ./export && docker compose up
+	@cd ./export/multi && docker compose up
 
 run-build:
-	@cd ./export && docker compose up --build
+	@cd ./export/multi && docker compose up --build

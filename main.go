@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"yml2docker/model"
 	"yml2docker/templates"
 
 	"github.com/jessevdk/go-flags"
@@ -45,8 +46,25 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Update old services (path directly in network) to network with array of paths
 	for serviceName, service := range ymlContent.Run {
-		// Create Dockerfile
+		if service.Network.Path != "" {
+			service.Network.Paths = []model.Path{{
+				Port:      3000,
+				Path:      service.Network.Path,
+				StripPath: service.Network.StripPath,
+			}}
+			service.Network.Ports = []model.Port{{
+				Port:     3000,
+				IsPublic: service.IsPublic,
+			}}
+			ymlContent.Run[serviceName] = service
+			fmt.Printf("updated old service %s: %v\n", serviceName, service)
+		}
+	}
+
+	// Create Dockerfiles
+	for serviceName, service := range ymlContent.Run {
 		fmt.Printf("creating dockerfile for service %s\n", serviceName)
 
 		config := templates.DockerTemplateConfig{
