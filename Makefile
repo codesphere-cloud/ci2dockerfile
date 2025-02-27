@@ -12,3 +12,6 @@ run:
 
 run-build:
 	@cd ./export/multi && docker compose up --build
+
+release:
+	goreleaser release
