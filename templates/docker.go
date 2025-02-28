@@ -1,11 +1,18 @@
 package templates
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 	"text/template"
 	"yml2docker/model"
 )
+
+//go:embed docker.tmpl
+var dockerTemplateFile string
+
+//go:embed shell.tmpl
+var entrypointTemplateFile string
 
 type DockerTemplateConfig struct {
 	OutputPath string
@@ -27,7 +34,7 @@ func CreateDockerfile(config DockerTemplateConfig) error {
 		return fmt.Errorf("error creating docker file: %w\n", err)
 	}
 
-	dockerTemplate, err := template.ParseFiles("./templates/docker.tmpl")
+	dockerTemplate, err := template.New("dockerTemplate").Parse(dockerTemplateFile)
 	if err != nil {
 		return fmt.Errorf("error parsing docker template: %w\n", err)
 	}
@@ -43,7 +50,7 @@ func CreateDockerfile(config DockerTemplateConfig) error {
 		return fmt.Errorf("error creating entrypoint.sh: %w\n", err)
 	}
 
-	entrypointTemplate, err := template.ParseFiles("./templates/shell.tmpl")
+	entrypointTemplate, err := template.New("entrypoint").Parse(entrypointTemplateFile)
 	if err != nil {
 		return fmt.Errorf("error parsing shell template: %w\n", err)
 	}

@@ -1,11 +1,15 @@
 package templates
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 	"text/template"
 	"yml2docker/model"
 )
+
+//go:embed dockercompose.tmpl
+var DockerComposeTemplateFile string
 
 type DockerComposeTemplateConfig struct {
 	OutputPath string
@@ -15,7 +19,7 @@ type DockerComposeTemplateConfig struct {
 }
 
 func CreateDockerCompose(config DockerComposeTemplateConfig) error {
-	t, err := template.ParseFiles("./templates/dockercompose.tmpl")
+	t, err := template.New("dockercompose.tmpl").Parse(DockerComposeTemplateFile)
 	if err != nil {
 		return fmt.Errorf("error parsing docker compose template: %w\n", err)
 	}

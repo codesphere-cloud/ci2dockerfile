@@ -1,11 +1,15 @@
 package templates
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 	"text/template"
 	"yml2docker/model"
 )
+
+//go:embed nginx.tmpl
+var nginxTemplateFile string
 
 type NginxConfigTemplateConfig struct {
 	OutputPath string
@@ -14,7 +18,7 @@ type NginxConfigTemplateConfig struct {
 }
 
 func CreateNginxConfig(config NginxConfigTemplateConfig) error {
-	t, err := template.ParseFiles("./templates/nginx.tmpl")
+	t, err := template.New("nginx").Parse(nginxTemplateFile)
 	if err != nil {
 		return fmt.Errorf("error parsing nginx template: %w\n", err)
 	}

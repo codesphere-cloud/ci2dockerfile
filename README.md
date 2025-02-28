@@ -4,8 +4,10 @@
 
 Download latest release from the [Release page](https://github.com/codesphere-cloud/ci2dockerfile/releases), e.g.:
 
-```
-wget https://github.com/codesphere-cloud/ci2dockerfile/releases/download/v0.1.3/ci2dockerfile_0.1.3_linux_amd64 -O ci2dockerfile
+```bash
+$ wget https://github.com/codesphere-cloud/ci2dockerfile/releases/download/v0.1.4/ci2dockerfile_0.1.4_linux_amd64 -O ci2dockerfile
+$ chmod +x ci2dockerfile
+$ ./ci2dockerfile ...
 ```
 
 ## Usage
