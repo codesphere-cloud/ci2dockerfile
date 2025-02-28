@@ -20,6 +20,10 @@ builds:
       - linux
       - windows
       - darwin
+    goarch:
+    - amd64
+    - arm64
+    - arm
 
 changelog:
   sort: asc
@@ -27,6 +31,10 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+
+archives:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+  format: binary
 
 release:
   footer: >-
