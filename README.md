@@ -1,17 +1,17 @@
-# yml2docker
+# ci2dockerfile
 
 ## Download release
 
 Download latest release from the [Release page](https://github.com/codesphere-cloud/ci2dockerfile/releases), e.g.:
 
 ```
-wget https://github.com/codesphere-cloud/ci2dockerfile/releases/download/v0.1.1/ci2dockerfile_Linux_x86_64 -O yml2docker
+wget https://github.com/codesphere-cloud/ci2dockerfile/releases/download/v0.1.3/ci2dockerfile_0.1.3_linux_amd64 -O ci2dockerfile
 ```
 
 ## Usage
 To export the example run `make example-export-single` and `make example-export-multi` for an old and new ci.yml. To run the newly created example docker compose file run `make run` (only uses the multi/new export).
 
-To use your own command you can use `./yml2docker -b ... -i ... -o ... -e ...`.
+To use your own command you can use `./ci2dockerfile -b ... -i ... -o ... -e ...`.
 
 Available parameters are:
 - `-b`: Base image for the dockerfile. **(Required)**
