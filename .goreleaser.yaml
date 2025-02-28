@@ -33,8 +33,7 @@ changelog:
       - "^test:"
 
 archives:
-  name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-  format: binary
+- format: binary
 
 release:
   footer: >-
