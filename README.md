@@ -1,9 +1,14 @@
 # yml2docker
 
-## Build tool
-Run `make build` in a terminal of this folder to create the go build.
+## Download release
 
-## Use tool
+Download latest release from the [Release page](https://github.com/codesphere-cloud/ci2dockerfile/releases), e.g.:
+
+```
+wget https://github.com/codesphere-cloud/ci2dockerfile/releases/download/v0.1.1/ci2dockerfile_Linux_x86_64 -O yml2docker
+```
+
+## Usage
 To export the example run `make example-export-single` and `make example-export-multi` for an old and new ci.yml. To run the newly created example docker compose file run `make run` (only uses the multi/new export).
 
 To use your own command you can use `./yml2docker -b ... -i ... -o ... -e ...`.
@@ -13,3 +18,6 @@ Available parameters are:
 - `-i`: Input path for the **ci.yml** file. Default is `./ci.yml`.
 - `-o`: Output path of the folder including docker compose and services. Default is `./export`.
 - `-e`: Env vars to put into docker compose services. Multiple can be added via multiple `-e` arguments.
+
+## Build tool
+Run `make build` in a terminal of this folder to create the go build.
