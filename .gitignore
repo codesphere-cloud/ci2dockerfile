@@ -31,5 +31,7 @@ go.work.sum
 !Makefile
 
 # Ignore export folder
-export/# Added by goreleaser init:
+export/
+
+# Added by goreleaser init:
 dist/
